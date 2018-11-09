@@ -74,11 +74,12 @@
 </script>
 
 <style lang="less">
+  @rem:375/10rem;
 .login{
   width: 100%;
   .btn{
-    margin-top: 20px;
-    padding: 0 20px;
+    margin-top: 20px/@rem;
+    padding: 0 20px/@rem;
   }
 }
 </style>

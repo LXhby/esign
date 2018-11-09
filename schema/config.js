@@ -1,5 +1,5 @@
 const mongoose = require('moongoose');
-const db = mongoose.createConnection('mongodb://localhost:27017/esign',{userNewParser:true})
+const db = mongoose.createConnection('mongodb://localhost:27017/database',{userNewParser:true})
 
 const Schema = mongoose.Schema;
 mongoose.promise = global.Promise;

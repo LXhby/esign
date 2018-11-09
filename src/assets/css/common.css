@@ -1,0 +1,31 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+a,
+body {
+  color: #000;
+  font-size: 14px;
+}
+li {
+  list-style: none;
+}
+a {
+  text-decoration: none;
+}
+img {
+  vertical-align: top;
+}
+.clearFix::after {
+  content: '';
+  display: block;
+  clear: both;
+  zoom: 1;
+  overflow: hidden;
+}
+.fl {
+  float: left;
+}
+.fr {
+  float: right;
+}

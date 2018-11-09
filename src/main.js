@@ -63,6 +63,10 @@ Vue.http.defaults.retryDelay = 1000;//重试延时
 Vue.http.defaults.shouldRetry = (error) => true;//重试条件，默认只要是错误都需要重试
 Vue.http.defaults.timeout = 30000;//延迟时间
 
+
+Vue.http.defaults.url = "http://baidu.com"
+
+
 //响应拦截重试
 Vue.http.interceptors.response.use(undefined, (err) => {
   var config = err.config;

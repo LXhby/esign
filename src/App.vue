@@ -23,6 +23,7 @@ export default {
 
 <style lang="less">
 @import '~vux/src/styles/reset.less';
+@import "//at.alicdn.com/t/font_909968_es9hpq8om6d.css";
 
 body {
   background-color: #fbf9fe;
