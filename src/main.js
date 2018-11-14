@@ -23,7 +23,9 @@ Es6Promise.polyfill()
 import VueWechatTitle from 'vue-wechat-title'
 Vue.use(VueWechatTitle)
 
-
+// 引入veevalidate
+// import VeeValidate from 'vee-validate';
+// Vue.use(VeeValidate);
 
 //vux
 import Vuex from 'vuex'
@@ -64,52 +66,58 @@ Vue.http.defaults.shouldRetry = (error) => true;//重试条件，默认只要是
 Vue.http.defaults.timeout = 30000;//延迟时间
 
 
-Vue.http.defaults.url = "http://baidu.com"
+Vue.http.defaults.baseURL='http://localhost:3000'
+Vue.http.defaults.withCredentials = true;
 
+
+// Vue.http.interceptors.push((request, next) => {
+//   request.credentials = true;
+//   next();
+// });
 
 //响应拦截重试
-Vue.http.interceptors.response.use(undefined, (err) => {
-  var config = err.config;
-  // 判断是否配置了重试
-  if(!config || !config.retry) return Promise.reject(err);
-
-  if(!config.shouldRetry || typeof config.shouldRetry != 'function') {
-    return Promise.reject(err);
-  }
-
-  //判断是否满足重试条件
-  if(!config.shouldRetry(err)) {
-    return Promise.reject(err);
-  }
-
-  // 设置重置次数，默认为0
-  config.__retryCount = config.__retryCount || 0;
-
-  // 判断是否超过了重试次数
-  if(config.__retryCount >= config.retry) {
-    Vue.$vux.toast.show({
-      type: 'cancel',
-      text: '网络超时，请检查网络连接，然后刷新页面',
-      time: 5000
-    })
-    return Promise.reject(err);
-  }
-
-  //重试次数自增
-  config.__retryCount += 1;
-
-  //延时处理
-  var backoff = new Promise(function(resolve) {
-    setTimeout(function() {
-      resolve();
-    }, config.retryDelay || 1);
-  });
-
-  //重新发起axios请求
-  return backoff.then(function() {
-    return Vue.http(config);
-  });
-});
+// Vue.http.interceptors.response.use(undefined, (err) => {
+//   var config = err.config;
+//   // 判断是否配置了重试
+//   if(!config || !config.retry) return Promise.reject(err);
+//
+//   if(!config.shouldRetry || typeof config.shouldRetry != 'function') {
+//     return Promise.reject(err);
+//   }
+//
+//   //判断是否满足重试条件
+//   if(!config.shouldRetry(err)) {
+//     return Promise.reject(err);
+//   }
+//
+//   // 设置重置次数，默认为0
+//   config.__retryCount = config.__retryCount || 0;
+//
+//   // 判断是否超过了重试次数
+//   if(config.__retryCount >= config.retry) {
+//     Vue.$vux.toast.show({
+//       type: 'cancel',
+//       text: '网络超时，请检查网络连接，然后刷新页面',
+//       time: 5000
+//     })
+//     return Promise.reject(err);
+//   }
+//
+//   //重试次数自增
+//   config.__retryCount += 1;
+//
+//   //延时处理
+//   var backoff = new Promise(function(resolve) {
+//     setTimeout(function() {
+//       resolve();
+//     }, config.retryDelay || 1);
+//   });
+//
+//   //重新发起axios请求
+//   return backoff.then(function() {
+//     return Vue.http(config);
+//   });
+// });
 
 
 //设置vuex  --  sync
@@ -122,7 +130,7 @@ store.registerModule('vux', { // 名字自己定义
     userInfo: null,
     url: null,
     title: null,
-    lecture: null,
+    lecture:""
   },
   mutations:{
     updateLoadingStatus(state, payload) {
@@ -145,7 +153,12 @@ store.registerModule('vux', { // 名字自己定义
       state.title = payload
     },
     setLecture(state, payload) {
-      state.lecture = payload.lecture
+      console.log(state.lecture)
+      if (!state.lecture) {
+        state.lecture = payload.lecture
+      } else {
+        Object.assign(state.lecture, payload.lecture)
+      }
     },
   },
   actions: {
@@ -160,15 +173,13 @@ sync(store, router)
 
 router.beforeEach(function (to,from,next) {//全局前置守卫
   store.commit('setTitle', to.meta.title)
-
+    console.log(store)
     if(to.meta.isChecked){
       console.log("请登录")
-      var isLogin = sessionStorage.getItem('isLogin');
+      var isLogin = store.state.vux.userInfo;
       if(isLogin){
-        console.log(to.fullPath)
         next();
       }else{
-        console.log(to.fullPath)
         next({ //第一次登录
           path:'/login'
         })

@@ -1,10 +1,11 @@
 <template>
     <div class="login">
+      <h3>欢迎来到医签到</h3>
       <group>
-        <x-input title="手机号码" placeholder="请输入手机号码" type="tel"  name="mobile"  mask="999 9999 9999" required v-model="confirm.mobile" ref="mobile"></x-input>
+        <x-input title="手机号码" placeholder="请输入手机号码" is-type="china-mobile"  name="mobile"  mask="999 9999 9999" required v-model="confirm.mobile" ref="mobile"></x-input>
       </group>
       <group>
-        <x-input title="输入密码" placeholder="请输入手机号码" type="password" required v-model="confirm.password1" ></x-input>
+        <x-input title="输入密码" placeholder="请输入手机号码" type="password" required v-model="confirm.password" ></x-input>
       </group>
       <div class="btn">
         <flexbox>
@@ -24,6 +25,9 @@
   import { XInput, Group, XButton, Cell,CheckIcon,Flexbox, FlexboxItem } from 'vux'
     export default {
         name: "login",
+      created(){
+
+      },
       components: {
         XInput,
         XButton,
@@ -36,23 +40,12 @@
         return{
           style: '',
           confirm:{
-            password1: '',
-            password2: '',
+            password: '',
             mobile:"",
-            demo1:false
-          },
-          bett:function (value) {
-            return{
-              valid:value === "tt",
-              msg:"Must be 2333"
-            }
           }
         }
       },
       methods: {
-        fn() {
-          console.log(1)
-        },
         alltrue() {//判断是否都为
           var fullItem = Object.values(this.confirm)
 
@@ -63,7 +56,18 @@
           if (errItem.length != 0) {
             this.$vux.toast.text("请填完整信息")
           } else {
-            this.http.post("")
+            this.$http.post("/user/login",this.confirm)
+              .then((res)=>{
+                this.$vux.toast.text(res.data.msg)
+                  if (res.data.status){//成功登录
+                    this.$store.commit('setUserInfo',{userInfo:this.confirm.mobile})
+                    this.$router.push({name:'index'})
+                  } else{
+                    this.confirm.password="";
+                    this.confirm.mobile="";
+                  }
+              })
+
           }
         },
         submitForm() {
@@ -77,9 +81,13 @@
   @rem:375/10rem;
 .login{
   width: 100%;
+  margin-top: 100/@rem;
+  h3{
+    text-align: center;
+  }
   .btn{
-    margin-top: 20px/@rem;
-    padding: 0 20px/@rem;
+    margin-top: 20/@rem;
+    padding: 0 20/@rem;
   }
 }
 </style>

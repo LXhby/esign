@@ -1,6 +1,6 @@
 const {Schema} = require('./config');
 const UserSchema = new Schema({
-  tel:number,
+  tel:String,
   password:String,
   role:{
     type:String,
