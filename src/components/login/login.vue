@@ -2,10 +2,10 @@
     <div class="login">
       <h3>欢迎来到医签到</h3>
       <group>
-        <x-input title="手机号码" placeholder="请输入手机号码" is-type="china-mobile"  name="mobile"  mask="999 9999 9999" required v-model="confirm.mobile" ref="mobile"></x-input>
+        <x-input title="手机号码" placeholder="请输入手机号码" is-type="china-mobile"  name="mobile"  required v-model="confirm.mobile" ref="mobile"></x-input>
       </group>
       <group>
-        <x-input title="输入密码" placeholder="请输入手机号码" type="password" required v-model="confirm.password" ></x-input>
+        <x-input title="输入密码" placeholder="请输入密码" type="password" required v-model="confirm.password" ></x-input>
       </group>
       <div class="btn">
         <flexbox>
@@ -60,7 +60,8 @@
               .then((res)=>{
                 this.$vux.toast.text(res.data.msg)
                   if (res.data.status){//成功登录
-                    this.$store.commit('setUserInfo',{userInfo:this.confirm.mobile})
+
+                    this.$store.commit('setUserInfo',{userInfo:res.data.userId})
                     this.$router.push({name:'index'})
                   } else{
                     this.confirm.password="";

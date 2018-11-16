@@ -8,6 +8,7 @@ import mymeeting from '../components/metting/mymeeting'
 import Create1 from '../components/metting/creatmeeting1'
 import Create2 from '../components/metting/createmeeting2'
 import Create3 from '../components/metting/createmeeting3'
+import Erweima from '../components/metting/erweima'
 
 Vue.use(Router)
 
@@ -48,6 +49,7 @@ export default new Router({
     },
     {
       path:'/mymeeting',
+      name:'mymeeting',
       component:mymeeting,
       meta:{
         title:'我的会议'
@@ -75,6 +77,14 @@ export default new Router({
       component:Create3,
       meta:{
         title:"创建会议"
+      }
+    },
+    {
+      name:"erweima",
+      path:"/erweima",
+      component:Erweima,
+      meta:{
+        title:"二维码"
       }
     }
   ]

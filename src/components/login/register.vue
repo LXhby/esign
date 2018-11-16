@@ -1,7 +1,7 @@
 <template>
   <div class="register">
     <group title="请设置手机号">
-      <x-input title="手机号码" placeholder="请输入手机号码" is-type="china-mobile"  name="mobile"  mask="999 9999 9999" required v-model="confirm.mobile" ref="mobile" ></x-input>
+      <x-input title="手机号码" placeholder="请输入手机号码" is-type="china-mobile"  name="mobile"   required v-model="confirm.mobile" ref="mobile" ></x-input>
     </group>
     <group title="请设置密码" class="pwd">
       <x-input title="输入密码" placeholder="至少六个字符" type="password" required :min="6" v-model="confirm.password1" ref="password1"></x-input>
@@ -70,6 +70,9 @@
           this.$http.post("/user/reg",this.confirm).then((res)=>{
             this.$vux.toast.text(res.data.msg)
             if (res.data.status){
+              console.log(res.data.status)
+              this.$store.state.vux.userInfo =null;
+
               this.$router.push({name:"login"})
             } else{
               this.confirm.password1="";

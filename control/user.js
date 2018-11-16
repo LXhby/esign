@@ -99,7 +99,8 @@ exports.login = async (ctx,next)=>{
 
         ctx.body={
           status:1,
-          msg:"登录成功"
+          msg:"登录成功",
+          userId:data[0]._id
         }
       }
     })
@@ -110,3 +111,5 @@ exports.login = async (ctx,next)=>{
       }
     })
 }
+
+
